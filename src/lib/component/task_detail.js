@@ -1,11 +1,7 @@
-import { Card, Button, Accordion, Table } from "react-bootstrap";
+import { Card, Button, Accordion, Table, Modal } from "react-bootstrap";
 import React, { Component } from "react";
-import {
-  TrashFill,
-  PencilFill,
-  PlusCircleFill,
-  PlusCircle,
-} from "react-bootstrap-icons";
+import { TrashFill, PencilFill } from "react-bootstrap-icons";
+import TaskInfoTab from "./tabs/task_info_tab";
 
 export default class TaskDetail extends Component {
   constructor(props) {
@@ -15,47 +11,7 @@ export default class TaskDetail extends Component {
   render() {
     return (
       <div>
-        <Accordion defaultActiveKey="0">
-          <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                Task Information
-              </Accordion.Toggle>
-            </Card.Header>
-            <Accordion.Collapse eventKey="0">
-              <div>
-                <Table responsive>
-                  <thead>
-                    <tr key={this.props.taskDetail.id}>
-                      <th>id</th>
-                      <th>Bean Name</th>
-                      <th>Task Name</th>
-                      <th>Lock Duration</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr key={this.props.taskDetail.id}>
-                      <td> {this.props.taskDetail.id}</td>
-                      <td>{this.props.taskDetail.beanName}</td>
-                      <td>{this.props.taskDetail.taskName}</td>
-                      <td>{this.props.taskDetail.lockDuration}</td>
-                      <td>
-                        <Button variant="info">
-                          <PencilFill />
-                        </Button>{" "}
-                        <Button variant="danger">
-                          <TrashFill />
-                        </Button>{" "}
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-                <PlusCircle />
-              </div>
-            </Accordion.Collapse>
-          </Card>
-        </Accordion>
+        <TaskInfoTab taskDetail = {this.props.taskDetail}/>
         <br />
         <Accordion defaultActiveKey="0">
           <Card>
@@ -82,13 +38,13 @@ export default class TaskDetail extends Component {
                         <td>{e.key}</td>
                         <td>{e.value}</td>
                         <td>
-                        <Button variant="info">
-                          <PencilFill />
-                        </Button>{" "}
-                        <Button variant="danger">
-                          <TrashFill />
-                        </Button>{" "}
-                      </td>
+                          <Button variant="info">
+                            <PencilFill />
+                          </Button>{" "}
+                          <Button variant="danger">
+                            <TrashFill />
+                          </Button>{" "}
+                        </td>
                       </tr>
                     );
                   })}
@@ -121,13 +77,13 @@ export default class TaskDetail extends Component {
                         <td>{e.id}</td>
                         <td>{e.cronValue}</td>
                         <td>
-                        <Button variant="info">
-                          <PencilFill />
-                        </Button>{" "}
-                        <Button variant="danger">
-                          <TrashFill />
-                        </Button>{" "}
-                      </td>
+                          <Button variant="info">
+                            <PencilFill />
+                          </Button>{" "}
+                          <Button variant="danger">
+                            <TrashFill />
+                          </Button>{" "}
+                        </td>
                       </tr>
                     );
                   })}

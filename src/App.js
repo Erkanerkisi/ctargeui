@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
-import Home from "./lib/components/home";
-import AddTask from "./lib/components/add_task";
+import Home from "./lib/component/home";
+import AddTask from "./lib/component/add_task";
 import { Navbar, Nav } from 'react-bootstrap';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 
