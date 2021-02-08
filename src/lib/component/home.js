@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Row, Col, ListGroup, Badge } from "react-bootstrap";
-import { data } from "../constant";
+import { data } from "../constant/constant";
 import TaskDetail from "./task_detail";
 import Welcome from "./welcome";
 
