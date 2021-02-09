@@ -7,7 +7,7 @@ export default class HeaderInfoTab extends Component {
     super(props);
     this.state = {
       taskDetail: this.props.taskDetail,
-      tmpHeader: { id: 0, key: "", value: "" },
+      tmpHeader: { id: null, key: "", value: "" },
       isOpenDeleteModal: false,
       isOpenEditModal: false,
     };
@@ -16,6 +16,9 @@ export default class HeaderInfoTab extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleEditClose = this.handleEditClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.newRecordShow = this.newRecordShow.bind(this);
+    
   }
 
   componentDidUpdate(prevProps) {
@@ -39,6 +42,17 @@ export default class HeaderInfoTab extends Component {
     });
   };
 
+  
+  handleDelete = () => {
+    var index = this.state.taskDetail.headers.findIndex(e => e.id == this.state.tmpHeader.id);
+    var _headers = [...this.state.taskDetail.headers];
+    _headers.splice(index, 1);
+    this.setState({
+      taskDetail: { ...this.state.taskDetail, headers: _headers},
+      isOpenDeleteModal: false
+    });
+  };
+
   handleClose = () => {
     this.setState({
       isOpenDeleteModal: false,
@@ -52,16 +66,27 @@ export default class HeaderInfoTab extends Component {
   };
 
   handleSave = () => {
-    
-    var index = this.state.taskDetail.headers.findIndex(e => e.id == this.state.tmpHeader.id);
     var _headers = [...this.state.taskDetail.headers];
-    _headers[index] = this.state.tmpHeader;
+
+    if(this.state.tmpHeader.id != null) {
+      var index = this.state.taskDetail.headers.findIndex(e => e.id == this.state.tmpHeader.id);  
+      _headers[index] = this.state.tmpHeader;
+    } else {
+      _headers.push(this.state.tmpHeader);
+    }
     
     this.setState({
       taskDetail: { ...this.state.taskDetail, headers: _headers},
       isOpenEditModal: false
     });
   };
+
+  newRecordShow = (val) => {
+    this.setState({
+      isOpenEditModal: val,
+      tmpHeader: { id: null, key: "", value: "" },
+    });
+  }
 
   render() {
     return (
@@ -74,7 +99,8 @@ export default class HeaderInfoTab extends Component {
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="1">
-              <Table responsive>
+            <Card.Body>
+              <Table responsive borderless>
                 <thead>
                   <tr key={this.state.taskDetail.id}>
                     <th>id</th>
@@ -93,13 +119,13 @@ export default class HeaderInfoTab extends Component {
                         <td>
                           <Button
                             onClick={() => this.setEditShow(true, e)}
-                            variant="info"
+                            variant="outline-info"
                           >
                             <PencilFill />
                           </Button>{" "}
                           <Button
                             onClick={() => this.setDeleteShow(true, e)}
-                            variant="danger"
+                            variant="outline-danger"
                           >
                             <TrashFill />
                           </Button>{" "}
@@ -109,6 +135,8 @@ export default class HeaderInfoTab extends Component {
                   })}
                 </tbody>
               </Table>
+              <Button onClick={() => this.newRecordShow(true)} variant="success">New Header</Button>
+                </Card.Body>
             </Accordion.Collapse>
           </Card>
         </Accordion>
@@ -119,7 +147,7 @@ export default class HeaderInfoTab extends Component {
           </Modal.Header>
           <Modal.Body>Are you sure want to delete?</Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={this.handleClose}>
+            <Button variant="danger" onClick={this.handleDelete}>
               Delete
             </Button>
           </Modal.Footer>

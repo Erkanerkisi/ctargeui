@@ -7,7 +7,7 @@ export default class RequestBodyInfoTab extends Component {
     super(props);
     this.state = {
       taskDetail : this.props.taskDetail,
-      tmpTaskDetail : this.props.taskDetail,
+      tmpRequestBody : { id: null, body: null},
       isOpenDeleteModal: false,
       isOpenEditModal: false,
     };
@@ -15,14 +15,15 @@ export default class RequestBodyInfoTab extends Component {
     this.setEditShow = this.setEditShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleEditClose = this.handleEditClose.bind(this);
-    console.log("TaskInfoTab taskDetail : " + this.props.taskDetail.taskName);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.newRecordShow = this.newRecordShow.bind(this);
+
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.taskDetail.id !== this.props.taskDetail.id) {
       this.setState({
         taskDetail : this.props.taskDetail,
-        tmpTaskDetail: this.props.taskDetail
       })
     }
   }
@@ -44,10 +45,33 @@ export default class RequestBodyInfoTab extends Component {
 
   handleEditClose = () => {
     this.setState({
-        taskDetail : this.state.tmpTaskDetail
+        taskDetail : this.state.tmpTaskDetail,
+        isOpenEditModal: false
     })      
-    this.setEditShow(false);
   };
+
+  handleSave = () => {
+    this.setState({
+        taskDetail :{...this.state.taskDetail,body: this.state.tmpRequestBody},
+        isOpenEditModal: false
+    })
+  };
+
+  
+  handleDelete = () => {
+    this.setState({
+      taskDetail :{...this.state.taskDetail,body: null},
+      isOpenDeleteModal: false
+  })
+  };
+
+  newRecordShow = (val) => {
+    this.setState({
+      isOpenEditModal: val,
+      tmpRequestBody: { id: null, body: null},
+    });
+  }
+
 
   render() {
     return (
@@ -60,24 +84,25 @@ export default class RequestBodyInfoTab extends Component {
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="1">
-              <Table responsive>
+            <Card.Body>
+              <Table responsive borderless>
                 <thead>
-                  <tr key={this.props.taskDetail.id}>
+                  <tr key={this.state.taskDetail.id}>
                     <th>id</th>
                     <th>body</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {this.props.taskDetail.body != null && (
-                    <tr key={this.props.taskDetail.body.id}>
-                      <td>{this.props.taskDetail.body.id}</td>
-                      <td>{this.props.taskDetail.body.body}</td>
+                  {this.state.taskDetail.body != null && (
+                    <tr key={this.state.taskDetail.body.id}>
+                      <td>{this.state.taskDetail.body.id}</td>
+                      <td>{this.state.taskDetail.body.body}</td>
                       <td>
-                        <Button onClick={() => this.setEditShow(true)} variant="info">
+                        <Button onClick={() => this.setEditShow(true)} variant="outline-info">
                           <PencilFill />
                         </Button>{" "}
-                        <Button onClick={() => this.setDeleteShow(true)} variant="danger">
+                        <Button onClick={() => this.setDeleteShow(true)} variant="outline-danger">
                           <TrashFill />
                         </Button>{" "}
                       </td>
@@ -85,6 +110,8 @@ export default class RequestBodyInfoTab extends Component {
                   )}
                 </tbody>
               </Table>
+              <Button onClick={() => this.newRecordShow(true)} variant="success">New Body</Button>
+                </Card.Body>
             </Accordion.Collapse>
           </Card>
         </Accordion>
@@ -95,7 +122,7 @@ export default class RequestBodyInfoTab extends Component {
           </Modal.Header>
           <Modal.Body>Are you sure want to delete?</Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={this.handleClose}>
+            <Button variant="danger" onClick={this.handleDelete}>
               Delete
             </Button>
           </Modal.Footer>
@@ -108,46 +135,23 @@ export default class RequestBodyInfoTab extends Component {
             <Form>
               <Form.Group controlId="id">
                 <Form.Label>Id</Form.Label>
-                <Form.Control disabled value = {this.state.taskDetail.id}/>
+                <Form.Control disabled value = {this.state.tmpRequestBody.id}/>
               </Form.Group>
 
-              <Form.Group controlId="beanName">
-                <Form.Label>Bean Name</Form.Label>
-                <Form.Control placeholder="Enter Bean Name"
+              <Form.Group controlId="body">
+                <Form.Label>Request Body</Form.Label>
+                <Form.Control placeholder="Enter Request Body"
                 onChange={e => this.setState({
-                    tmpTaskDetail: {
-                        ...this.state.tmpTaskDetail, beanName: e.target.value
+                  tmpRequestBody: {
+                        ...this.state.tmpRequestBody, body: e.target.value
                     }
                 })}
-                value = {this.state.tmpTaskDetail.beanName}/>
-              </Form.Group>
-
-              <Form.Group controlId="taskName">
-                <Form.Label>Task Name</Form.Label>
-                <Form.Control 
-                label="Task Name"
-                onChange={e => this.setState({
-                    tmpTaskDetail: {
-                        ...this.state.tmpTaskDetail, taskName: e.target.value
-                    }
-                })}
-                value = {this.state.tmpTaskDetail.taskName}/>
-              </Form.Group>
-
-              <Form.Group controlId="lockDuration">
-                <Form.Label>Lock Duration</Form.Label>
-                <Form.Control placeholder="Lock Duration" 
-                onChange={e => this.setState({
-                    tmpTaskDetail: {
-                        ...this.state.tmpTaskDetail, lockDuration: e.target.value
-                    }
-                })}
-                value = {this.state.tmpTaskDetail.lockDuration}/>
+                value = {this.state.tmpRequestBody.body}/>
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="info" onClick={this.handleEditClose}>
+            <Button variant="info" onClick={this.handleSave}>
               Save
             </Button>
           </Modal.Footer>

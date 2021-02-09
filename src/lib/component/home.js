@@ -57,7 +57,8 @@ export default class Home extends Component {
             </ListGroup>
           </Col>
 
-          <Col xs={9}>{taskDetail}</Col>
+          <Col xs={9}>
+            {taskDetail}</Col>
         </Row>
       </Container>
     );

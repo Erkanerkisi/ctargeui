@@ -1,6 +1,8 @@
 import logo from "./logo.svg";
 import Home from "./lib/component/home";
 import AddTask from "./lib/component/add_task";
+import Overview from "./lib/component/overview";
+
 import { Navbar, Nav } from 'react-bootstrap';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 
@@ -21,13 +23,16 @@ function App() {
           Scheduler Dashboard
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/">Overview</Nav.Link>
+          <Nav.Link href="/overview">Overview</Nav.Link>
           <Nav.Link href="/add">Add Task</Nav.Link>
         </Nav>
       </Navbar>
         <Switch>
           <Route path="/home">
           <Home />
+          </ Route>
+          <Route path="/overview">
+          <Overview/>
           </ Route>
           <Route path="/add">
             <AddTask/>

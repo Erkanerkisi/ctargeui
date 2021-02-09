@@ -90,15 +90,9 @@ export default class TaskInfoTab extends Component {
                       <td>
                         <Button
                           onClick={() => this.setEditShow(true)}
-                          variant="info"
+                          variant="outline-info"
                         >
                           <PencilFill />
-                        </Button>{" "}
-                        <Button
-                          onClick={() => this.setDeleteShow(true)}
-                          variant="danger"
-                        >
-                          <TrashFill />
                         </Button>{" "}
                       </td>
                     </tr>
