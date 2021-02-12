@@ -44,8 +44,8 @@ export default class HeaderInfoTab extends Component {
 
   
   handleDelete = () => {
-    var index = this.state.taskDetail.headers.findIndex(e => e.id == this.state.tmpHeader.id);
-    var _headers = [...this.state.taskDetail.headers];
+    var index = this.state.taskDetail.requestHeaders.findIndex(e => e.id == this.state.tmpHeader.id);
+    var _headers = [...this.state.taskDetail.requestHeaders];
     _headers.splice(index, 1);
     this.setState({
       taskDetail: { ...this.state.taskDetail, headers: _headers},
@@ -66,10 +66,10 @@ export default class HeaderInfoTab extends Component {
   };
 
   handleSave = () => {
-    var _headers = [...this.state.taskDetail.headers];
+    var _headers = [...this.state.taskDetail.requestHeaders];
 
     if(this.state.tmpHeader.id != null) {
-      var index = this.state.taskDetail.headers.findIndex(e => e.id == this.state.tmpHeader.id);  
+      var index = this.state.taskDetail.requestHeaders.findIndex(e => e.id == this.state.tmpHeader.id);  
       _headers[index] = this.state.tmpHeader;
     } else {
       _headers.push(this.state.tmpHeader);
@@ -110,7 +110,7 @@ export default class HeaderInfoTab extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.taskDetail.headers.map((e) => {
+                  {this.state.taskDetail.requestHeaders.map((e) => {
                     return (
                       <tr key={e.id}>
                         <td>{e.id}</td>

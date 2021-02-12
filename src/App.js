@@ -1,7 +1,8 @@
 import logo from "./logo.svg";
-import Home from "./lib/component/home";
-import AddTask from "./lib/component/add_task";
-import Overview from "./lib/component/overview";
+import TasksPage from "./lib/component/page/tasks/tasks_page";
+import ScheduledTasksPage from "./lib/component/page/scheduledTasks/scheduled_tasks_page";
+import CreateTaskPage from "./lib/component/page/tasks/create_task_page";
+import Dashboard from "./lib/component/page/dashboard";
 
 import { Navbar, Nav } from 'react-bootstrap';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
@@ -23,22 +24,26 @@ function App() {
           Scheduler Dashboard
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Nav.Link href="/overview">Overview</Nav.Link>
-          <Nav.Link href="/add">Add Task</Nav.Link>
+        <Nav.Link href="/scheduledTasks">Scheduled Tasks</Nav.Link>
+          <Nav.Link href="/tasks">Tasks</Nav.Link>
+          <Nav.Link href="/createTask">Create Task</Nav.Link>
         </Nav>
       </Navbar>
         <Switch>
-          <Route path="/home">
-          <Home />
+          <Route path="/tasks">
+          <TasksPage />
           </ Route>
-          <Route path="/overview">
-          <Overview/>
+          <Route path="/scheduledTasks">
+          <ScheduledTasksPage/>
           </ Route>
-          <Route path="/add">
-            <AddTask/>
+          <Route path="/createTask">
+            <CreateTaskPage/>
           </Route>
           <Route path="/">
-            <Home />
+            <TasksPage />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
         </Switch>
       </div>

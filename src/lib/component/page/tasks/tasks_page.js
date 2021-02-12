@@ -1,18 +1,27 @@
 import React, { Component } from "react";
-import { Container, Row, Col, ListGroup, Badge } from "react-bootstrap";
-import { data } from "../constant/constant";
+import { Container, Row, Col, ListGroup } from "react-bootstrap";
 import TaskDetail from "./task_detail";
-import Welcome from "./welcome";
+import Welcome from "../../welcome";
+import { getTasks } from "../../../network/network";
+import SchSpinner from "../../spinner";
 
-export default class Home extends Component {
+
+export default class TasksPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: data,
+      tasks: [],
       selectedTask: null,
       activeTaskId: 0,
+      isLoading: true
     };
     this.onTaskSelect = this.onTaskSelect.bind(this);
+  }
+
+  componentDidMount() {
+    getTasks().then((res)=> {
+      this.setState({ tasks: res, isLoading: false });
+    }); 
   }
 
   onTaskSelect = (task) => {
@@ -32,14 +41,12 @@ export default class Home extends Component {
     }
 
     return (
-      <Container fluid>
+      this.state.isLoading ? <SchSpinner/> : <Container fluid>
         <br />
         <Row>
-          <Col xs={3}>
-            <h1>
-              <Badge variant="secondary">Tasks</Badge>
-            </h1>
-            <ListGroup displayName="erer">
+          <Col xs={3} className="justify-content-md-center">
+            <h3 class="text-center">Tasks</h3>
+            <ListGroup>
               {this.state.tasks.map((index) => {
                 return (
                   <ListGroup.Item
@@ -57,8 +64,7 @@ export default class Home extends Component {
             </ListGroup>
           </Col>
 
-          <Col xs={9}>
-            {taskDetail}</Col>
+          <Col xs={9}>{taskDetail}</Col>
         </Row>
       </Container>
     );

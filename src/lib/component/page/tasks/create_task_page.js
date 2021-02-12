@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Form, Row, Col, Container, Button } from "react-bootstrap";
-import { data } from "../constant/constant";
+import { data } from "../../../constant/constant";
 import { PlusSquareFill, DashSquareFill } from "react-bootstrap-icons";
 
-export default class AddTask extends Component {
+export default class CreateTaskPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,10 +75,14 @@ export default class AddTask extends Component {
     }
 
     this.state.headerInputValues.forEach((e, index) => {
-      if ((e.key == null || e.key == "") && e.value !=null && e.value != '') {
-        errors.push("header"+index);
-      }else if((e.value == null || e.value == "") && e.key !=null && e.key != ''){
-        errors.push("header"+index);
+      if ((e.key == null || e.key == "") && e.value != null && e.value != "") {
+        errors.push("header" + index);
+      } else if (
+        (e.value == null || e.value == "") &&
+        e.key != null &&
+        e.key != ""
+      ) {
+        errors.push("header" + index);
       }
     });
 
@@ -89,13 +93,17 @@ export default class AddTask extends Component {
     if (errors.length > 0) {
       return false;
     } else {
-      //İşlemlere başla
-
-      alert("everything good. submit form!");
-      console.log("taskDetail : " + this.state.taskDetail.beanName);
-      data.push(this.state.taskDetail);
-      console.log("taskDetail : " + this.state.taskDetail.beanName);
-      console.log("taskDetail : " + this.state.taskDetail.taskName);
+      this.setState(
+        {
+          taskDetail: {
+            ...this.state.taskDetail,
+            cron: this.state.cronInputValues,
+            headers: this.state.headerInputValues,
+          },
+        },
+        () => data.push(this.state.taskDetail)
+      );
+      console.log(data);
     }
   };
 
@@ -274,7 +282,7 @@ export default class AddTask extends Component {
                   <Form.Row key={"header" + index}>
                     <Col xs="auto">
                       <Form.Control
-                        isInvalid={this.hasError("header"+ index)}
+                        isInvalid={this.hasError("header" + index)}
                         name="key"
                         placeholder="Header Key"
                         onChange={(event) =>

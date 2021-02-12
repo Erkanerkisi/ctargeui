@@ -4,6 +4,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 1 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -30,6 +31,7 @@ export const data = [
       "beanName": "coreScheduler",
       "taskName": "Task 2 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -56,6 +58,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 3 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -81,6 +84,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 4 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -107,6 +111,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 5 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -133,6 +138,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 6 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -159,6 +165,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 7 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -185,6 +192,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 8 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -211,6 +219,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 9 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -237,6 +246,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 10 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -263,6 +273,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 11 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,
@@ -289,6 +300,7 @@ export const data = [
       "beanName": "simpleScheduler",
       "taskName": "Task 12 is call something that very important",
       "lockDuration": 60,
+      "status": "Active",
       "headers": [
         {
           "id": 1,

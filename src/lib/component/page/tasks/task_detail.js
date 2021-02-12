@@ -15,9 +15,9 @@ export default class TaskDetail extends Component {
     console.log("taskDetail : " + this.props.taskDetail.taskName);
     return (
       <div>
-        <h1>
-          <Badge variant="secondary">Details</Badge>
-        </h1>
+        <h3>
+          Task Details
+        </h3>
         <TaskInfoTab taskDetail={this.props.taskDetail} />
         <br />
         <HeaderInfoTab taskDetail={this.props.taskDetail} />

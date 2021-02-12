@@ -47,10 +47,10 @@ export default class CronInfoTab extends Component {
   };
 
   handleDelete = () => {
-    var index = this.state.taskDetail.cron.findIndex(
+    var index = this.state.taskDetail.crons.findIndex(
       (e) => e.id == this.state.tmpCron.id
     );
-    var _crons = [...this.state.taskDetail.cron];
+    var _crons = [...this.state.taskDetail.crons];
     _crons.splice(index, 1);
     this.setState({
       taskDetail: { ...this.state.taskDetail, cron: _crons },
@@ -65,9 +65,9 @@ export default class CronInfoTab extends Component {
   };
 
   handleSave = () => {
-    var _crons = [...this.state.taskDetail.cron];
+    var _crons = [...this.state.taskDetail.crons];
     if (this.state.tmpCron.id != null) {
-      var index = this.state.taskDetail.cron.findIndex(
+      var index = this.state.taskDetail.crons.findIndex(
         (e) => e.id == this.state.tmpCron.id
       );
       _crons[index] = this.state.tmpCron;
@@ -108,7 +108,7 @@ export default class CronInfoTab extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.taskDetail.cron.map((e) => {
+                    {this.state.taskDetail.crons.map((e) => {
                       return (
                         <tr key={e.id}>
                           <td>{e.id}</td>

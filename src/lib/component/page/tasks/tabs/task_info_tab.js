@@ -77,6 +77,7 @@ export default class TaskInfoTab extends Component {
                       <th>id</th>
                       <th>Bean Name</th>
                       <th>Task Name</th>
+                      <th>Status</th>
                       <th>Lock Duration</th>
                       <th>Action</th>
                     </tr>
@@ -86,9 +87,10 @@ export default class TaskInfoTab extends Component {
                       <td> {this.state.taskDetail.id}</td>
                       <td>{this.state.taskDetail.beanName}</td>
                       <td>{this.state.taskDetail.taskName}</td>
+                      <td>{this.state.taskDetail.status}</td>
                       <td>{this.state.taskDetail.lockDuration}</td>
                       <td>
-                        <Button
+                        <Button 
                           onClick={() => this.setEditShow(true)}
                           variant="outline-info"
                         >
