@@ -95,9 +95,10 @@ export default class TaskDetail extends Component {
         <Button size="lg" variant="primary" onClick = {this.saveTask}>
           Save Task
         </Button>{" "}
-        <Button size="lg" variant="danger" onClick = {this.deleteTask}>
+        <Button className="float-right" size="lg" variant="danger" onClick = {this.deleteTask}>
           Delete Task
         </Button>{" "}
+        <br />
       </div>
     );
   }

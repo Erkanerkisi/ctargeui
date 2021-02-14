@@ -66,6 +66,7 @@ export default class TasksPage extends Component {
 
           <Col xs={9}>{taskDetail}</Col>
         </Row>
+        <br/>
       </Container>
     );
   }
