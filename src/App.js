@@ -40,7 +40,7 @@ function App() {
             <CreateTaskPage/>
           </Route>
           <Route path="/">
-            <TasksPage />
+            <Dashboard />
           </Route>
           <Route path="/dashboard">
             <Dashboard />
