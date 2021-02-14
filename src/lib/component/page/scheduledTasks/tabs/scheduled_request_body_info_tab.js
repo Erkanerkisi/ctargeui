@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button, Accordion, Table, Modal, Form } from "react-bootstrap";
-import { TrashFill, PencilFill, PlusCircle } from "react-bootstrap-icons";
+import { Card, Button, Accordion, Table} from "react-bootstrap";
 
 export default class ScheduledRequestBodyInfoTab extends Component {
   constructor(props) {
@@ -11,13 +10,6 @@ export default class ScheduledRequestBodyInfoTab extends Component {
       isOpenDeleteModal: false,
       isOpenEditModal: false,
     };
-    this.setDeleteShow = this.setDeleteShow.bind(this);
-    this.setEditShow = this.setEditShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleEditClose = this.handleEditClose.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.newRecordShow = this.newRecordShow.bind(this);
-
   }
 
   componentDidUpdate(prevProps) {
@@ -27,51 +19,6 @@ export default class ScheduledRequestBodyInfoTab extends Component {
       })
     }
   }
-  
-  setDeleteShow = (val) => {
-    this.setState({
-      isOpenDeleteModal: val,
-    });
-  };
-  setEditShow = (val) => {
-    this.setState({
-      isOpenEditModal: val,
-    });
-  };
-
-  handleClose = () => {
-    this.setDeleteShow(false);
-  };
-
-  handleEditClose = () => {
-    this.setState({
-        taskDetail : this.state.tmpTaskDetail,
-        isOpenEditModal: false
-    })      
-  };
-
-  handleSave = () => {
-    this.setState({
-        taskDetail :{...this.state.taskDetail,body: this.state.tmpRequestBody},
-        isOpenEditModal: false
-    })
-  };
-
-  
-  handleDelete = () => {
-    this.setState({
-      taskDetail :{...this.state.taskDetail,body: null},
-      isOpenDeleteModal: false
-  })
-  };
-
-  newRecordShow = (val) => {
-    this.setState({
-      isOpenEditModal: val,
-      tmpRequestBody: { id: null, body: null},
-    });
-  }
-
 
   render() {
     return (
@@ -93,10 +40,10 @@ export default class ScheduledRequestBodyInfoTab extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.taskDetail.body != null && (
-                    <tr key={this.state.taskDetail.body.id}>
-                      <td>{this.state.taskDetail.body.id}</td>
-                      <td>{this.state.taskDetail.body.body}</td>
+                  {this.state.taskDetail.requestBody != null && (
+                    <tr key={this.state.taskDetail.requestBody.id}>
+                      <td>{this.state.taskDetail.requestBody.id}</td>
+                      <td>{this.state.taskDetail.requestBody.body}</td>
                     </tr>
                   )}
                 </tbody>

@@ -48,7 +48,7 @@ export default class HeaderInfoTab extends Component {
     var _headers = [...this.state.taskDetail.requestHeaders];
     _headers.splice(index, 1);
     this.setState({
-      taskDetail: { ...this.state.taskDetail, headers: _headers},
+      taskDetail: { ...this.state.taskDetail, requestHeaders: _headers},
       isOpenDeleteModal: false
     });
   };
@@ -76,7 +76,7 @@ export default class HeaderInfoTab extends Component {
     }
     
     this.setState({
-      taskDetail: { ...this.state.taskDetail, headers: _headers},
+      taskDetail: { ...this.state.taskDetail, requestHeaders: _headers},
       isOpenEditModal: false
     });
   };

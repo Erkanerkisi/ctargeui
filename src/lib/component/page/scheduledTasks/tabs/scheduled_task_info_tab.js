@@ -11,13 +11,6 @@ export default class ScheduledTaskInfoTab extends Component {
       isOpenDeleteModal: false,
       isOpenEditModal: false,
     };
-    this.setDeleteShow = this.setDeleteShow.bind(this);
-    this.setEditShow = this.setEditShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleEditClose = this.handleEditClose.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-
-    console.log("TaskInfoTab taskDetail : " + this.props.taskDetail.taskName);
   }
 
   componentDidUpdate(prevProps) {
@@ -29,35 +22,6 @@ export default class ScheduledTaskInfoTab extends Component {
     }
   }
   
-  setDeleteShow = (val) => {
-    this.setState({
-      isOpenDeleteModal: val,
-    });
-  };
-  setEditShow = (val) => {
-    this.setState({
-      isOpenEditModal: val,
-    });
-  };
-
-  handleClose = () => {
-    this.setDeleteShow(false);
-  };
-
-  handleEditClose = () => {
-    this.setState({
-        taskDetail : this.state.tmpTaskDetail
-    })      
-    this.setEditShow(false);
-  };
-
-  handleSave = () => {
-    this.setState({
-        taskDetail : this.state.tmpTaskDetail
-    })      
-    this.setEditShow(false);
-  };
-
 
   render() {
     return (
@@ -78,7 +42,7 @@ export default class ScheduledTaskInfoTab extends Component {
                       <th>Bean Name</th>
                       <th>Task Name</th>
                       <th>Status</th>
-                      <th>Lock Duration</th>
+                      <th>Max Lock Duration</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -87,7 +51,7 @@ export default class ScheduledTaskInfoTab extends Component {
                       <td>{this.state.taskDetail.beanName}</td>
                       <td>{this.state.taskDetail.taskName}</td>
                       <td>{this.state.taskDetail.status}</td>
-                      <td>{this.state.taskDetail.lockDuration}</td>
+                      <td>{this.state.taskDetail.maxLockDuration}</td>
                     </tr>
                   </tbody>
                 </Table>

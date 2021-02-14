@@ -6,8 +6,8 @@ export default class TaskInfoTab extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      taskDetail : this.props.taskDetail,
-      tmpTaskDetail : this.props.taskDetail,
+      taskDetail: this.props.taskDetail,
+      tmpTaskDetail: this.props.taskDetail,
       isOpenDeleteModal: false,
       isOpenEditModal: false,
     };
@@ -16,19 +16,17 @@ export default class TaskInfoTab extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleEditClose = this.handleEditClose.bind(this);
     this.handleSave = this.handleSave.bind(this);
-
-    console.log("TaskInfoTab taskDetail : " + this.props.taskDetail.taskName);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.taskDetail.id !== this.props.taskDetail.id) {
       this.setState({
-        taskDetail : this.props.taskDetail,
-        tmpTaskDetail: this.props.taskDetail
-      })
+        taskDetail: this.props.taskDetail,
+        tmpTaskDetail: this.props.taskDetail,
+      });
     }
   }
-  
+
   setDeleteShow = (val) => {
     this.setState({
       isOpenDeleteModal: val,
@@ -46,18 +44,17 @@ export default class TaskInfoTab extends Component {
 
   handleEditClose = () => {
     this.setState({
-        taskDetail : this.state.tmpTaskDetail
-    })      
+      taskDetail: this.state.tmpTaskDetail,
+    });
     this.setEditShow(false);
   };
 
   handleSave = () => {
     this.setState({
-        taskDetail : this.state.tmpTaskDetail
-    })      
+      taskDetail: this.state.tmpTaskDetail,
+    });
     this.setEditShow(false);
   };
-
 
   render() {
     return (
@@ -77,8 +74,10 @@ export default class TaskInfoTab extends Component {
                       <th>id</th>
                       <th>Bean Name</th>
                       <th>Task Name</th>
+                      <th>Path Value</th>
                       <th>Status</th>
-                      <th>Lock Duration</th>
+                      <th>Max Lock Duration</th>
+                      <th>Finish Task Id</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -87,10 +86,12 @@ export default class TaskInfoTab extends Component {
                       <td> {this.state.taskDetail.id}</td>
                       <td>{this.state.taskDetail.beanName}</td>
                       <td>{this.state.taskDetail.taskName}</td>
+                      <td>{this.state.taskDetail.pathValue}</td>
                       <td>{this.state.taskDetail.status}</td>
-                      <td>{this.state.taskDetail.lockDuration}</td>
+                      <td>{this.state.taskDetail.maxLockDuration}</td>
+                      <td>{this.state.taskDetail.finishTaskId}</td>
                       <td>
-                        <Button 
+                        <Button
                           onClick={() => this.setEditShow(true)}
                           variant="outline-info"
                         >
@@ -159,23 +160,76 @@ export default class TaskInfoTab extends Component {
                   value={this.state.tmpTaskDetail.taskName}
                 />
               </Form.Group>
-
-              <Form.Group controlId="lockDuration">
-                <Form.Label>Lock Duration</Form.Label>
+              <Form.Group controlId="pathValue">
+                <Form.Label>Path Value</Form.Label>
                 <Form.Control
-                  placeholder="Lock Duration"
+                  label="Path Value"
+                  placeholder="Path Value"
                   onChange={(e) =>
                     this.setState({
                       tmpTaskDetail: {
                         ...this.state.tmpTaskDetail,
-                        lockDuration: e.target.value,
+                        pathValue: e.target.value,
                       },
                     })
                   }
-                  value={this.state.tmpTaskDetail.lockDuration}
+                  value={this.state.tmpTaskDetail.pathValue}
+                />
+              </Form.Group>
+              <Form.Group controlId="status">
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  as="select"
+                  className="mr-sm-2"
+                  id="inlineFormCustomSelect"
+                  custom
+                  value={this.state.tmpTaskDetail.status}
+                  onChange={(e) =>
+                    this.setState({
+                      tmpTaskDetail: {
+                        ...this.state.tmpTaskDetail,
+                        status: e.target.value,
+                      },
+                    })
+                  }
+                >
+                  <option value="Passive">Passive</option>
+                  <option value="Active">Active</option>
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group controlId="maxLockDuration">
+                <Form.Label>Max Lock Duration</Form.Label>
+                <Form.Control
+                  placeholder="Max Lock Duration"
+                  onChange={(e) =>
+                    this.setState({
+                      tmpTaskDetail: {
+                        ...this.state.tmpTaskDetail,
+                        maxLockDuration: e.target.value,
+                      },
+                    })
+                  }
+                  value={this.state.tmpTaskDetail.maxLockDuration}
                 />
               </Form.Group>
             </Form>
+            <Form.Group controlId="finishTaskId">
+                <Form.Label>Finish Task Id</Form.Label>
+                <Form.Control
+                  label="Finish Task Id"
+                  placeholder="Finish Task Id"
+                  onChange={(e) =>
+                    this.setState({
+                      tmpTaskDetail: {
+                        ...this.state.tmpTaskDetail,
+                        finishTaskId: e.target.value,
+                      },
+                    })
+                  }
+                  value={this.state.tmpTaskDetail.finishTaskId}
+                />
+              </Form.Group>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="info" onClick={this.handleSave}>

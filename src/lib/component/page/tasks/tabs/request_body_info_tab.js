@@ -52,7 +52,7 @@ export default class RequestBodyInfoTab extends Component {
 
   handleSave = () => {
     this.setState({
-        taskDetail :{...this.state.taskDetail,body: this.state.tmpRequestBody},
+        taskDetail :{...this.state.taskDetail,requestBody: this.state.tmpRequestBody},
         isOpenEditModal: false
     })
   };
@@ -60,7 +60,7 @@ export default class RequestBodyInfoTab extends Component {
   
   handleDelete = () => {
     this.setState({
-      taskDetail :{...this.state.taskDetail,body: null},
+      taskDetail :{...this.state.taskDetail,requestBody: null},
       isOpenDeleteModal: false
   })
   };
@@ -94,10 +94,10 @@ export default class RequestBodyInfoTab extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.taskDetail.body != null && (
-                    <tr key={this.state.taskDetail.body.id}>
-                      <td>{this.state.taskDetail.body.id}</td>
-                      <td>{this.state.taskDetail.body.body}</td>
+                  {this.state.taskDetail.requestBody != null && (
+                    <tr key={this.state.taskDetail.requestBody.id}>
+                      <td>{this.state.taskDetail.requestBody.id}</td>
+                      <td>{this.state.taskDetail.requestBody.body}</td>
                       <td>
                         <Button onClick={() => this.setEditShow(true)} variant="outline-info">
                           <PencilFill />

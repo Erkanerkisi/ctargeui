@@ -11,12 +11,6 @@ export default class ScheduledCronInfoTab extends Component {
       isOpenDeleteModal: false,
       isOpenEditModal: false,
     };
-    this.setDeleteShow = this.setDeleteShow.bind(this);
-    this.setEditShow = this.setEditShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handleEditClose = this.handleEditClose.bind(this);
-    this.newRecordShow = this.newRecordShow.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -25,66 +19,6 @@ export default class ScheduledCronInfoTab extends Component {
         taskDetail: this.props.taskDetail,
       });
     }
-  }
-
-  setDeleteShow = (val, cron) => {
-    this.setState({
-      isOpenDeleteModal: val,
-      tmpCron: cron,
-    });
-  };
-  setEditShow = (val, cron) => {
-    this.setState({
-      isOpenEditModal: val,
-      tmpCron: cron,
-    });
-  };
-
-  handleClose = () => {
-    this.setState({
-      isOpenDeleteModal: false,
-    });
-  };
-
-  handleDelete = () => {
-    var index = this.state.taskDetail.crons.findIndex(
-      (e) => e.id == this.state.tmpCron.id
-    );
-    var _crons = [...this.state.taskDetail.crons];
-    _crons.splice(index, 1);
-    this.setState({
-      taskDetail: { ...this.state.taskDetail, cron: _crons },
-      isOpenDeleteModal: false,
-    });
-  };
-
-  handleEditClose = () => {
-    this.setState({
-      isOpenEditModal: false,
-    });
-  };
-
-  handleSave = () => {
-    var _crons = [...this.state.taskDetail.crons];
-    if (this.state.tmpCron.id != null) {
-      var index = this.state.taskDetail.crons.findIndex(
-        (e) => e.id == this.state.tmpCron.id
-      );
-      _crons[index] = this.state.tmpCron;
-    } else {
-      _crons.push(this.state.tmpCron);
-    }
-    this.setState({
-      taskDetail: { ...this.state.taskDetail, cron: _crons },
-      isOpenEditModal: false,
-    });
-  };
-
-  newRecordShow = (val) => {
-    this.setState({
-      isOpenEditModal: val,
-      tmpCron: {id: null, cronValue: null},
-    });
   }
 
   render() {

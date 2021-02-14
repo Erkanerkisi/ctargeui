@@ -53,7 +53,7 @@ export default class CronInfoTab extends Component {
     var _crons = [...this.state.taskDetail.crons];
     _crons.splice(index, 1);
     this.setState({
-      taskDetail: { ...this.state.taskDetail, cron: _crons },
+      taskDetail: { ...this.state.taskDetail, crons: _crons },
       isOpenDeleteModal: false,
     });
   };
@@ -75,7 +75,7 @@ export default class CronInfoTab extends Component {
       _crons.push(this.state.tmpCron);
     }
     this.setState({
-      taskDetail: { ...this.state.taskDetail, cron: _crons },
+      taskDetail: { ...this.state.taskDetail, crons: _crons },
       isOpenEditModal: false,
     });
   };

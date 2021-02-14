@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { Form, Row, Col, Container, Button } from "react-bootstrap";
-import { data } from "../../../constant/constant";
+import { Form, Row, Col, Container, Button, Alert } from "react-bootstrap";
 import { PlusSquareFill, DashSquareFill } from "react-bootstrap-icons";
+import { addTask } from "../../../network/network";
+
+const errorMessage = "Creation of task has failed!";
+const successMessage = "Task has been successfully created!";
 
 export default class CreateTaskPage extends Component {
   constructor(props) {
@@ -11,16 +14,19 @@ export default class CreateTaskPage extends Component {
         id: null,
         beanName: null,
         taskName: null,
-        lockDuration: null,
+        pathValue: null,
+        maxLockDuration: null,
         status: "Passive",
-        headers: [],
-        cron: [],
-        body: null,
-        depencdency: null,
+        requestHeaders: [],
+        crons: [],
+        requestBody: null,
+        finishTaskId: null
       },
       errors: [],
       cronInputValues: [{ id: null, cronValue: "" }],
       headerInputValues: [{ id: null, key: "", value: "" }],
+      showErrorAlert: false,
+      showSuccessAlert: false,
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.cronInputValuesAddRecord = this.cronInputValuesAddRecord.bind(this);
@@ -36,6 +42,14 @@ export default class CreateTaskPage extends Component {
     );
     this.handleHeaderInputChange = this.handleHeaderInputChange.bind(this);
   }
+
+
+  showSuccessAlert = (val) => {
+    this.setState({ showSuccessAlert: val });
+  };
+  showErrorAlert = (val) => {
+    this.setState({ showErrorAlert: val });
+  };
 
   onSubmit = () => {
     let errors = [];
@@ -53,16 +67,22 @@ export default class CreateTaskPage extends Component {
       errors.push("beanName");
     }
     if (
+      this.state.taskDetail.pathValue == null ||
+      this.state.taskDetail.pathValue === ""
+    ) {
+      errors.push("pathValue");
+    }
+    if (
       this.state.taskDetail.status == null ||
       this.state.taskDetail.status === ""
     ) {
       errors.push("status");
     }
     if (
-      this.state.taskDetail.lockDuration == null ||
-      this.state.taskDetail.lockDuration === ""
+      this.state.taskDetail.maxLockDuration == null ||
+      this.state.taskDetail.maxLockDuration === ""
     ) {
-      errors.push("lockDuration");
+      errors.push("maxLockDuration");
     }
 
     if (
@@ -72,6 +92,15 @@ export default class CreateTaskPage extends Component {
       this.state.cronInputValues[0].cronValue === ""
     ) {
       errors.push("cron");
+    }
+
+    if (
+      this.state.taskDetail.beanName != null &&
+      this.state.taskDetail.beanName == "finishScheduler" &&
+      (this.state.taskDetail.finishTaskId == null ||
+        this.state.taskDetail.finishTaskId === "")
+    ) {
+      errors.push("finishTaskId");
     }
 
     this.state.headerInputValues.forEach((e, index) => {
@@ -97,13 +126,20 @@ export default class CreateTaskPage extends Component {
         {
           taskDetail: {
             ...this.state.taskDetail,
-            cron: this.state.cronInputValues,
-            headers: this.state.headerInputValues,
+            crons: this.state.cronInputValues,
+            requestHeaders: this.state.headerInputValues,
           },
         },
-        () => data.push(this.state.taskDetail)
+        () => {
+          addTask(this.state.taskDetail).then((response)=> {
+            if (response.httpStatusCode == 200) {
+              this.showSuccessAlert(true);
+            } else {
+              this.showErrorAlert(true);
+            }
+          });
+        }
       );
-      console.log(data);
     }
   };
 
@@ -167,15 +203,36 @@ export default class CreateTaskPage extends Component {
     return (
       <Container fluid>
         <br />
+        {this.state.showSuccessAlert && (
+          <Alert
+            key={1}
+            variant="success"
+            dismissible
+            onClose={() => this.showSuccessAlert(false)}
+          >
+            {successMessage}
+          </Alert>
+        )}
+        {this.state.showErrorAlert && (
+          <Alert
+            key={1}
+            variant="danger"
+            dismissible
+            onClose={() => this.showErrorAlert(false)}
+          >
+            {errorMessage}
+          </Alert>
+        )}
         <Row>
           <Col xs={4}></Col>
           <Col xs={4}>
             <Form>
               <Form.Group controlId="taskName">
-                <Form.Label>Task Name</Form.Label>
+                <Form.Label>Task Name*</Form.Label>
                 <Form.Control
                   isInvalid={this.hasError("taskName")}
                   label="Task Name"
+                  placeholder="Enter Task Name"
                   name="taskName"
                   onChange={(e) =>
                     this.setState({
@@ -190,7 +247,7 @@ export default class CreateTaskPage extends Component {
               </Form.Group>
 
               <Form.Group controlId="beanName">
-                <Form.Label>Bean Name</Form.Label>
+                <Form.Label>Bean Name*</Form.Label>
                 <Form.Control
                   isInvalid={this.hasError("beanName")}
                   name="beanName"
@@ -206,22 +263,52 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.beanName}
                 />
               </Form.Group>
+
+              <Form.Group controlId="pathValue">
+                <Form.Label>Path Value*</Form.Label>
+                <Form.Control
+                  isInvalid={this.hasError("pathValue")}
+                  name="pathValue"
+                  placeholder="Enter Path Value"
+                  onChange={(e) =>
+                    this.setState({
+                      taskDetail: {
+                        ...this.state.taskDetail,
+                        pathValue: e.target.value,
+                      },
+                    })
+                  }
+                  value={this.state.taskDetail.pathValue}
+                />
+              </Form.Group>
+
               <Form.Group controlId="status">
-                <Form.Label>Task Status</Form.Label>
+                <Form.Label>Task Status*</Form.Label>
                 <Form.Control
                   isInvalid={this.hasError("status")}
                   name="status"
                   label="Task Status"
                   value={this.state.taskDetail.status}
-                  disabled
-                />
-                <Form.Text className="text-muted">
-                  You can change status on Dashboard page.
-                </Form.Text>
+                  as="select"
+                  className="mr-sm-2"
+                  id="inlineFormCustomSelect"
+                  custom
+                  onChange={(e) =>
+                    this.setState({
+                      taskDetail: {
+                        ...this.state.taskDetail,
+                        status: e.target.value,
+                      },
+                    })
+                  }
+                >
+                  <option value="Passive">Passive</option>
+                  <option value="Active">Active</option>
+                </Form.Control>
               </Form.Group>
 
               <Form.Group controlId="cronslabel">
-                <Form.Label>Cron Expressions</Form.Label>
+                <Form.Label>Cron Expressions*</Form.Label>
               </Form.Group>
 
               {this.state.cronInputValues.map((input, index) => (
@@ -255,21 +342,21 @@ export default class CreateTaskPage extends Component {
                 </Form.Group>
               ))}
 
-              <Form.Group controlId="lockDuration">
-                <Form.Label>Lock Duration</Form.Label>
+              <Form.Group controlId="maxLockDuration">
+                <Form.Label>Max Lock Duration*</Form.Label>
                 <Form.Control
-                  isInvalid={this.hasError("lockDuration")}
-                  name="lockDuration"
-                  placeholder="Lock Duration"
+                  isInvalid={this.hasError("maxLockDuration")}
+                  name="maxLockDuration"
+                  placeholder="Max Lock Duration"
                   onChange={(e) =>
                     this.setState({
                       taskDetail: {
                         ...this.state.taskDetail,
-                        lockDuration: e.target.value,
+                        maxLockDuration: e.target.value,
                       },
                     })
                   }
-                  value={this.state.taskDetail.lockDuration}
+                  value={this.state.taskDetail.maxLockDuration}
                 />
               </Form.Group>
 
@@ -321,7 +408,7 @@ export default class CreateTaskPage extends Component {
                 </Form.Group>
               ))}
 
-              <Form.Group controlId="body">
+              <Form.Group controlId="requestBody">
                 <Form.Label>Request Body</Form.Label>
                 <Form.Control
                   placeholder="Request Body"
@@ -329,15 +416,33 @@ export default class CreateTaskPage extends Component {
                     this.setState({
                       taskDetail: {
                         ...this.state.taskDetail,
-                        body: { id: null, body: e.target.value },
+                        requestBody: { id: null, body: e.target.value },
                       },
                     })
                   }
                   value={
-                    this.state.taskDetail.body == null
+                    this.state.taskDetail.requestBody == null
                       ? null
-                      : this.state.taskDetail.body.body
+                      : this.state.taskDetail.requestBody.body
                   }
+                />
+              </Form.Group>
+
+              <Form.Group controlId="finishTaskId">
+                <Form.Label>Finish Task Id</Form.Label>
+                <Form.Control
+                  isInvalid={this.hasError("finishTaskId")}
+                  name="finishTaskId"
+                  placeholder="Enter Finish Task Id"
+                  onChange={(e) =>
+                    this.setState({
+                      taskDetail: {
+                        ...this.state.taskDetail,
+                        finishTaskId: e.target.value,
+                      },
+                    })
+                  }
+                  value={this.state.taskDetail.finishTaskId}
                 />
               </Form.Group>
 

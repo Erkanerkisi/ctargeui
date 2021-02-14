@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Card, Button, Accordion, Table, Modal, Form } from "react-bootstrap";
-import { TrashFill, PencilFill, PlusCircle } from "react-bootstrap-icons";
+import { Card, Button, Accordion, Table} from "react-bootstrap";
 
 export default class ScheduledHeaderInfoTab extends Component {
   constructor(props) {
@@ -10,15 +9,7 @@ export default class ScheduledHeaderInfoTab extends Component {
       tmpHeader: { id: null, key: "", value: "" },
       isOpenDeleteModal: false,
       isOpenEditModal: false,
-    };
-    this.setDeleteShow = this.setDeleteShow.bind(this);
-    this.setEditShow = this.setEditShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleEditClose = this.handleEditClose.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.newRecordShow = this.newRecordShow.bind(this);
-    
+    };   
   }
 
   componentDidUpdate(prevProps) {
@@ -27,65 +18,6 @@ export default class ScheduledHeaderInfoTab extends Component {
         taskDetail: this.props.taskDetail,
       });
     }
-  }
-
-  setDeleteShow = (val, header) => {
-    this.setState({
-      isOpenDeleteModal: val,
-      tmpHeader: header,
-    });
-  };
-  setEditShow = (val, header) => {
-    this.setState({
-      isOpenEditModal: val,
-      tmpHeader: header,
-    });
-  };
-
-  
-  handleDelete = () => {
-    var index = this.state.taskDetail.requestHeaders.findIndex(e => e.id == this.state.tmpHeader.id);
-    var _headers = [...this.state.taskDetail.requestHeaders];
-    _headers.splice(index, 1);
-    this.setState({
-      taskDetail: { ...this.state.taskDetail, headers: _headers},
-      isOpenDeleteModal: false
-    });
-  };
-
-  handleClose = () => {
-    this.setState({
-      isOpenDeleteModal: false,
-    });
-  };
-
-  handleEditClose = () => {
-    this.setState({
-      isOpenEditModal: false,
-    });
-  };
-
-  handleSave = () => {
-    var _headers = [...this.state.taskDetail.requestHeaders];
-
-    if(this.state.tmpHeader.id != null) {
-      var index = this.state.taskDetail.requestHeaders.findIndex(e => e.id == this.state.tmpHeader.id);  
-      _headers[index] = this.state.tmpHeader;
-    } else {
-      _headers.push(this.state.tmpHeader);
-    }
-    
-    this.setState({
-      taskDetail: { ...this.state.taskDetail, headers: _headers},
-      isOpenEditModal: false
-    });
-  };
-
-  newRecordShow = (val) => {
-    this.setState({
-      isOpenEditModal: val,
-      tmpHeader: { id: null, key: "", value: "" },
-    });
   }
 
   render() {

@@ -20,7 +20,7 @@ export default class ScheduledTasksPage extends Component {
 
   componentDidMount() {
     getScheduledTasks().then((res)=> {
-      this.setState({ tasks: res, isLoading: false });
+      this.setState({ tasks: res.body, isLoading: false });
     }); 
   }
 

@@ -20,7 +20,7 @@ export default class TasksPage extends Component {
 
   componentDidMount() {
     getTasks().then((res)=> {
-      this.setState({ tasks: res, isLoading: false });
+      this.setState({ tasks: res.body, isLoading: false });
     }); 
   }
 
