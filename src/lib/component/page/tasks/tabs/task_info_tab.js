@@ -10,6 +10,7 @@ export default class TaskInfoTab extends Component {
       tmpTaskDetail: this.props.taskDetail,
       isOpenDeleteModal: false,
       isOpenEditModal: false,
+      formErrors: [],
     };
     this.setDeleteShow = this.setDeleteShow.bind(this);
     this.setEditShow = this.setEditShow.bind(this);
@@ -49,11 +50,66 @@ export default class TaskInfoTab extends Component {
     this.setEditShow(false);
   };
 
+  hasError(key) {
+    return this.state.formErrors.indexOf(key) !== -1;
+  }
+
   handleSave = () => {
+
+    let formErrors = [];
+
+    if (
+      this.state.tmpTaskDetail.taskName == null ||
+      this.state.tmpTaskDetail.taskName === ""
+    ) {
+      formErrors.push("taskName");
+    }
+    if (
+      this.state.tmpTaskDetail.beanName == null ||
+      this.state.tmpTaskDetail.beanName === ""
+    ) {
+      formErrors.push("beanName");
+    }
+    if (
+      this.state.tmpTaskDetail.pathValue == null ||
+      this.state.tmpTaskDetail.pathValue === ""
+    ) {
+      formErrors.push("pathValue");
+    }
+    if (
+      this.state.tmpTaskDetail.status == null ||
+      this.state.tmpTaskDetail.status === ""
+    ) {
+      formErrors.push("status");
+    }
+    if (
+      this.state.tmpTaskDetail.maxLockDuration == null ||
+      this.state.tmpTaskDetail.maxLockDuration === ""
+    ) {
+      formErrors.push("maxLockDuration");
+    }
+
+    if (
+      this.state.tmpTaskDetail.beanName != null &&
+      this.state.tmpTaskDetail.beanName == "finishScheduler" &&
+      (this.state.tmpTaskDetail.finishTaskId == null ||
+        this.state.tmpTaskDetail.finishTaskId === "")
+    ) {
+      formErrors.push("finishTaskId");
+    }
+
     this.setState({
-      taskDetail: this.state.tmpTaskDetail,
+      formErrors: formErrors,
     });
-    this.setEditShow(false);
+
+    if (formErrors.length > 0) {
+      return false;
+    } else {
+      this.setState({
+        taskDetail: this.state.tmpTaskDetail,
+      });
+      this.setEditShow(false);
+    }
   };
 
   render() {
@@ -61,11 +117,9 @@ export default class TaskInfoTab extends Component {
       <div>
         <Accordion defaultActiveKey="0">
           <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="0">
+              <Accordion.Toggle as={Card.Header} eventKey="0" style={{ color : '#0275d8', fontSize: 18}}>
                 Task Information
               </Accordion.Toggle>
-            </Card.Header>
             <Accordion.Collapse eventKey="0">
               <div>
                 <Table responsive>
@@ -118,9 +172,10 @@ export default class TaskInfoTab extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <Modal show={this.state.isOpenEditModal} onHide={this.handleEditClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit</Modal.Title>
+            <Modal.Title>Edit Task Info</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -133,6 +188,7 @@ export default class TaskInfoTab extends Component {
                 <Form.Label>Bean Name</Form.Label>
                 <Form.Control
                   placeholder="Enter Bean Name"
+                  isInvalid={this.hasError("beanName")}
                   onChange={(e) =>
                     this.setState({
                       tmpTaskDetail: {
@@ -149,6 +205,8 @@ export default class TaskInfoTab extends Component {
                 <Form.Label>Task Name</Form.Label>
                 <Form.Control
                   label="Task Name"
+                  isInvalid={this.hasError("taskName")}
+                  name="taskName"
                   onChange={(e) =>
                     this.setState({
                       tmpTaskDetail: {
@@ -165,6 +223,7 @@ export default class TaskInfoTab extends Component {
                 <Form.Control
                   label="Path Value"
                   placeholder="Path Value"
+                  isInvalid={this.hasError("pathValue")}
                   onChange={(e) =>
                     this.setState({
                       tmpTaskDetail: {
@@ -181,6 +240,7 @@ export default class TaskInfoTab extends Component {
                 <Form.Control
                   as="select"
                   className="mr-sm-2"
+                  isInvalid={this.hasError("status")}
                   id="inlineFormCustomSelect"
                   custom
                   value={this.state.tmpTaskDetail.status}
@@ -202,6 +262,7 @@ export default class TaskInfoTab extends Component {
                 <Form.Label>Max Lock Duration</Form.Label>
                 <Form.Control
                   placeholder="Max Lock Duration"
+                  isInvalid={this.hasError("maxLockDuration")}
                   onChange={(e) =>
                     this.setState({
                       tmpTaskDetail: {
@@ -219,6 +280,7 @@ export default class TaskInfoTab extends Component {
                 <Form.Control
                   label="Finish Task Id"
                   placeholder="Finish Task Id"
+                  isInvalid={this.hasError("finishTaskId")}
                   onChange={(e) =>
                     this.setState({
                       tmpTaskDetail: {

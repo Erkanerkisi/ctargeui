@@ -26,11 +26,9 @@ export default class ScheduledCronInfoTab extends Component {
       <div>
         <Accordion defaultActiveKey="0">
           <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+              <Accordion.Toggle as={Card.Header} eventKey="1" style={{ color : '#0275d8', fontSize: 18}}>
                 Cron Value Information
               </Accordion.Toggle>
-            </Card.Header>
             <Accordion.Collapse eventKey="1">
               <Card.Body>
                 <Table responsive borderless>

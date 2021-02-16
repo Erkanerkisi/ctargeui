@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col, ListGroup } from "react-bootstrap";
+import { Container, Row, Col, ListGroup,Alert } from "react-bootstrap";
 import TaskDetail from "./task_detail";
 import Welcome from "../../welcome";
 import { getTasks } from "../../../network/network";
@@ -13,14 +13,20 @@ export default class TasksPage extends Component {
       tasks: [],
       selectedTask: null,
       activeTaskId: 0,
-      isLoading: true
+      isLoading: true,
+      serviceError: false,
     };
     this.onTaskSelect = this.onTaskSelect.bind(this);
   }
 
   componentDidMount() {
     getTasks().then((res)=> {
-      this.setState({ tasks: res.body, isLoading: false });
+      
+      if (res.httpStatusCode == 200) {
+        this.setState({ tasks: res.body, isLoading: false });
+      } else {
+        this.setState({ serviceError: true, isLoading: false });
+      }
     }); 
   }
 
@@ -29,8 +35,7 @@ export default class TasksPage extends Component {
       selectedTask: task,
     });
   };
-
-  render() {
+  renderTaskDetail() {
     var taskDetail;
     if (this.state.selectedTask == null) {
       taskDetail = <Welcome />;
@@ -40,12 +45,17 @@ export default class TasksPage extends Component {
       );
     }
 
+    return taskDetail;
+  }
+
+  
+  renderBody() {
     return (
-      this.state.isLoading ? <SchSpinner/> : <Container fluid>
+      <Container fluid>
         <br />
         <Row>
           <Col xs={3} className="justify-content-md-center">
-            <h3 class="text-center">Tasks</h3>
+            <h3 className="text-center">Tasks</h3>
             <ListGroup>
               {this.state.tasks.map((index) => {
                 return (
@@ -64,10 +74,27 @@ export default class TasksPage extends Component {
             </ListGroup>
           </Col>
 
-          <Col xs={9}>{taskDetail}</Col>
+          <Col xs={9}>{this.renderTaskDetail()}</Col>
         </Row>
         <br/>
       </Container>
     );
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return <SchSpinner />;
+    } else if (this.state.serviceError) {
+      return (
+        <Container>
+          <br />
+          <Alert key={1} variant="danger" dismissible>
+            Could not load data from service
+          </Alert>
+        </Container>
+      );
+    } else {
+      return this.renderBody();
+    }
   }
 }

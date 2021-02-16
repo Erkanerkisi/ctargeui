@@ -28,11 +28,9 @@ export default class ScheduledTaskInfoTab extends Component {
       <div>
         <Accordion defaultActiveKey="0">
           <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="0">
+              <Accordion.Toggle as={Card.Header} eventKey="0" style={{ color : '#0275d8', fontSize: 18}}>
                 Task Information
               </Accordion.Toggle>
-            </Card.Header>
             <Accordion.Collapse eventKey="0">
               <div>
                 <Table responsive>

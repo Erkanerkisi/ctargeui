@@ -445,14 +445,18 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.finishTaskId}
                 />
               </Form.Group>
-
-              <Button variant="primary" onClick={this.onSubmit}>
-                Submit
+              <Form.Group controlId="xx">
+                <Button variant="primary" onClick={this.onSubmit} style={{width: '100%'}}>
+                Save
               </Button>
+              
+              </Form.Group>
+
             </Form>
           </Col>
           <Col xs={4}></Col>
         </Row>
+        <br/>
       </Container>
     );
   }

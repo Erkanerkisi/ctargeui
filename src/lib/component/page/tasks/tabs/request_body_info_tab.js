@@ -10,6 +10,7 @@ export default class RequestBodyInfoTab extends Component {
       tmpRequestBody : { id: null, body: null},
       isOpenDeleteModal: false,
       isOpenEditModal: false,
+      formErrors: [],
     };
     this.setDeleteShow = this.setDeleteShow.bind(this);
     this.setEditShow = this.setEditShow.bind(this);
@@ -27,7 +28,11 @@ export default class RequestBodyInfoTab extends Component {
       })
     }
   }
-  
+
+  hasError(key) {
+    return this.state.formErrors.indexOf(key) !== -1;
+  }
+
   setDeleteShow = (val) => {
     this.setState({
       isOpenDeleteModal: val,
@@ -45,16 +50,34 @@ export default class RequestBodyInfoTab extends Component {
 
   handleEditClose = () => {
     this.setState({
-        taskDetail : this.state.tmpTaskDetail,
         isOpenEditModal: false
     })      
   };
 
   handleSave = () => {
+
+    let formErrors = [];
+
+    if (
+      this.state.tmpRequestBody == null ||
+      this.state.tmpRequestBody.body == null ||
+      this.state.tmpRequestBody.body === ""
+    ) {
+      formErrors.push("body");
+    }
+
     this.setState({
+      formErrors: formErrors,
+    });
+
+    if (formErrors.length > 0) {
+      return false;
+    } else {
+      this.setState({
         taskDetail :{...this.state.taskDetail,requestBody: this.state.tmpRequestBody},
         isOpenEditModal: false
     })
+    }
   };
 
   
@@ -78,11 +101,9 @@ export default class RequestBodyInfoTab extends Component {
       <div>
         <Accordion defaultActiveKey="0">
           <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+              <Accordion.Toggle as={Card.Header} eventKey="1" style={{ color : '#0275d8', fontSize: 18}}>
                 Request Body Information
               </Accordion.Toggle>
-            </Card.Header>
             <Accordion.Collapse eventKey="1">
             <Card.Body>
               <Table responsive borderless>
@@ -129,7 +150,7 @@ export default class RequestBodyInfoTab extends Component {
         </Modal>
         <Modal show={this.state.isOpenEditModal} onHide={this.handleEditClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit</Modal.Title>
+            <Modal.Title>Edit Request Body Info</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -141,6 +162,7 @@ export default class RequestBodyInfoTab extends Component {
               <Form.Group controlId="body">
                 <Form.Label>Request Body</Form.Label>
                 <Form.Control placeholder="Enter Request Body"
+                 isInvalid={this.hasError("body")}
                 onChange={e => this.setState({
                   tmpRequestBody: {
                         ...this.state.tmpRequestBody, body: e.target.value

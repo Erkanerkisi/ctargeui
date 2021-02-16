@@ -10,6 +10,7 @@ export default class HeaderInfoTab extends Component {
       tmpHeader: { id: null, key: "", value: "" },
       isOpenDeleteModal: false,
       isOpenEditModal: false,
+      formErrors: [],
     };
     this.setDeleteShow = this.setDeleteShow.bind(this);
     this.setEditShow = this.setEditShow.bind(this);
@@ -27,6 +28,10 @@ export default class HeaderInfoTab extends Component {
         taskDetail: this.props.taskDetail,
       });
     }
+  }
+
+  hasError(key) {
+    return this.state.formErrors.indexOf(key) !== -1;
   }
 
   setDeleteShow = (val, header) => {
@@ -66,19 +71,50 @@ export default class HeaderInfoTab extends Component {
   };
 
   handleSave = () => {
-    var _headers = [...this.state.taskDetail.requestHeaders];
 
-    if(this.state.tmpHeader.id != null) {
-      var index = this.state.taskDetail.requestHeaders.findIndex(e => e.id == this.state.tmpHeader.id);  
-      _headers[index] = this.state.tmpHeader;
-    } else {
-      _headers.push(this.state.tmpHeader);
+    let formErrors = [];
+
+    if (
+      this.state.tmpHeader == null ||
+      this.state.tmpHeader.key == null ||
+      this.state.tmpHeader.key === "" ||
+      this.state.tmpHeader.key === " "
+    ) {
+      formErrors.push("headerKey");
     }
-    
+
+    if (
+      this.state.tmpHeader == null ||
+      this.state.tmpHeader.value == null ||
+      this.state.tmpHeader.value === "" ||
+      this.state.tmpHeader.value === " "
+    ) {
+      formErrors.push("headerValue");
+    }
+
+
     this.setState({
-      taskDetail: { ...this.state.taskDetail, requestHeaders: _headers},
-      isOpenEditModal: false
+      formErrors: formErrors,
     });
+
+    if (formErrors.length > 0) {
+      return false;
+    } else {
+
+      var _headers = [...this.state.taskDetail.requestHeaders];
+
+      if(this.state.tmpHeader.id != null) {
+        var index = this.state.taskDetail.requestHeaders.findIndex(e => e.id == this.state.tmpHeader.id);  
+        _headers[index] = this.state.tmpHeader;
+      } else {
+        _headers.push(this.state.tmpHeader);
+      }
+      
+      this.setState({
+        taskDetail: { ...this.state.taskDetail, requestHeaders: _headers},
+        isOpenEditModal: false
+      });
+    }
   };
 
   newRecordShow = (val) => {
@@ -93,11 +129,9 @@ export default class HeaderInfoTab extends Component {
       <div>
         <Accordion defaultActiveKey="0">
           <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+              <Accordion.Toggle as={Card.Header} eventKey="1" style={{ color : '#0275d8', fontSize: 18}}>
                 Header Information
               </Accordion.Toggle>
-            </Card.Header>
             <Accordion.Collapse eventKey="1">
             <Card.Body>
               <Table responsive borderless>
@@ -152,9 +186,10 @@ export default class HeaderInfoTab extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <Modal show={this.state.isOpenEditModal} onHide={this.handleEditClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit</Modal.Title>
+            <Modal.Title>Edit Header Info</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -167,6 +202,7 @@ export default class HeaderInfoTab extends Component {
                 <Form.Label>Header Key</Form.Label>
                 <Form.Control
                   placeholder="Enter Header Key"
+                  isInvalid={this.hasError("headerKey")}
                   onChange={(e) =>
                     this.setState({
                       tmpHeader: {
@@ -183,6 +219,7 @@ export default class HeaderInfoTab extends Component {
                 <Form.Label>Header Value</Form.Label>
                 <Form.Control
                   label="Header Value"
+                  isInvalid={this.hasError("headerValue")}
                   onChange={(e) =>
                     this.setState({
                       tmpHeader: {

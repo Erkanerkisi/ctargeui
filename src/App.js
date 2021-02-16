@@ -29,7 +29,7 @@ function App() {
           <Nav.Link href="/createTask">Create Task</Nav.Link>
         </Nav>
       </Navbar>
-        <Switch>
+      <Switch>
           <Route path="/tasks">
           <TasksPage />
           </ Route>

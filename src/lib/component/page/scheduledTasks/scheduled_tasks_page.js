@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Container, Row, Col, ListGroup } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Alert } from "react-bootstrap";
 import ScheduledTaskDetail from "./scheduled_task_detail";
 import Welcome from "../../welcome";
 import { getScheduledTasks } from "../../../network/network";
 import SchSpinner from "../../spinner";
-
 
 export default class ScheduledTasksPage extends Component {
   constructor(props) {
@@ -13,15 +12,20 @@ export default class ScheduledTasksPage extends Component {
       tasks: [],
       selectedTask: null,
       activeTaskId: 0,
-      isLoading: true
+      isLoading: true,
+      serviceError: false,
     };
     this.onTaskSelect = this.onTaskSelect.bind(this);
   }
 
   componentDidMount() {
-    getScheduledTasks().then((res)=> {
-      this.setState({ tasks: res.body, isLoading: false });
-    }); 
+    getScheduledTasks().then((res) => {
+      if (res.httpStatusCode == 200) {
+        this.setState({ tasks: res.body, isLoading: false });
+      } else {
+        this.setState({ serviceError: true, isLoading: false });
+      }
+    });
   }
 
   onTaskSelect = (task) => {
@@ -30,22 +34,28 @@ export default class ScheduledTasksPage extends Component {
     });
   };
 
-  render() {
+  renderTaskDetail() {
     var taskDetail;
     if (this.state.selectedTask == null) {
       taskDetail = <Welcome />;
     } else {
       taskDetail = (
-        <ScheduledTaskDetail taskDetail={this.state.selectedTask}></ScheduledTaskDetail>
+        <ScheduledTaskDetail
+          taskDetail={this.state.selectedTask}
+        ></ScheduledTaskDetail>
       );
     }
 
+    return taskDetail;
+  }
+
+  renderBody() {
     return (
-      this.state.isLoading ? <SchSpinner/> : <Container fluid>
+      <Container fluid>
         <br />
         <Row>
           <Col xs={3} className="justify-content-md-center">
-            <h3 class="text-center">Scheduled Tasks</h3>
+            <h3 className="text-center">Scheduled Tasks</h3>
             <ListGroup>
               {this.state.tasks.map((index) => {
                 return (
@@ -64,9 +74,26 @@ export default class ScheduledTasksPage extends Component {
             </ListGroup>
           </Col>
 
-          <Col xs={9}>{taskDetail}</Col>
+          <Col xs={9}>{this.renderTaskDetail()}</Col>
         </Row>
       </Container>
     );
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return <SchSpinner />;
+    } else if (this.state.serviceError) {
+      return (
+        <Container>
+          <br />
+          <Alert key={1} variant="danger" dismissible>
+            Could not load data from service
+          </Alert>
+        </Container>
+      );
+    } else {
+      return this.renderBody();
+    }
   }
 }

@@ -10,6 +10,7 @@ export default class CronInfoTab extends Component {
       tmpCron: { id: null, cronValue: null },
       isOpenDeleteModal: false,
       isOpenEditModal: false,
+      formErrors: [],
     };
     this.setDeleteShow = this.setDeleteShow.bind(this);
     this.setEditShow = this.setEditShow.bind(this);
@@ -25,6 +26,10 @@ export default class CronInfoTab extends Component {
         taskDetail: this.props.taskDetail,
       });
     }
+  }
+
+  hasError(key) {
+    return this.state.formErrors.indexOf(key) !== -1;
   }
 
   setDeleteShow = (val, cron) => {
@@ -65,19 +70,40 @@ export default class CronInfoTab extends Component {
   };
 
   handleSave = () => {
-    var _crons = [...this.state.taskDetail.crons];
-    if (this.state.tmpCron.id != null) {
-      var index = this.state.taskDetail.crons.findIndex(
-        (e) => e.id == this.state.tmpCron.id
-      );
-      _crons[index] = this.state.tmpCron;
-    } else {
-      _crons.push(this.state.tmpCron);
+
+    let formErrors = [];
+
+    if (
+      this.state.tmpCron == null ||
+      this.state.tmpCron.cronValue == null ||
+      this.state.tmpCron.cronValue === "" ||
+      this.state.tmpCron.cronValue === " "
+    ) {
+      formErrors.push("cronValue");
     }
+
+
     this.setState({
-      taskDetail: { ...this.state.taskDetail, crons: _crons },
-      isOpenEditModal: false,
+      formErrors: formErrors,
     });
+
+    if (formErrors.length > 0) {
+      return false;
+    } else {
+      var _crons = [...this.state.taskDetail.crons];
+      if (this.state.tmpCron.id != null) {
+        var index = this.state.taskDetail.crons.findIndex(
+          (e) => e.id == this.state.tmpCron.id
+        );
+        _crons[index] = this.state.tmpCron;
+      } else {
+        _crons.push(this.state.tmpCron);
+      }
+      this.setState({
+        taskDetail: { ...this.state.taskDetail, crons: _crons },
+        isOpenEditModal: false,
+      });
+    }
   };
 
   newRecordShow = (val) => {
@@ -92,11 +118,9 @@ export default class CronInfoTab extends Component {
       <div>
         <Accordion defaultActiveKey="0">
           <Card>
-            <Card.Header>
-              <Accordion.Toggle as={Button} variant="link" eventKey="1">
+              <Accordion.Toggle as={Card.Header} eventKey="1" style={{ color : '#0275d8', fontSize: 18}}>
                 Cron Value Information
               </Accordion.Toggle>
-            </Card.Header>
             <Accordion.Collapse eventKey="1">
               <Card.Body>
                 <Table responsive borderless>
@@ -149,9 +173,10 @@ export default class CronInfoTab extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
+
         <Modal show={this.state.isOpenEditModal} onHide={this.handleEditClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit</Modal.Title>
+            <Modal.Title>Edit Cron Info</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -164,6 +189,7 @@ export default class CronInfoTab extends Component {
                 <Form.Label>Cron Value</Form.Label>
                 <Form.Control
                   placeholder="Enter Cron Value"
+                  isInvalid={this.hasError("cronValue")}
                   onChange={(e) =>
                     this.setState({
                       tmpCron: {
