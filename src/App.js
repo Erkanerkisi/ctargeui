@@ -3,7 +3,6 @@ import TasksPage from "./lib/component/page/tasks/tasks_page";
 import ScheduledTasksPage from "./lib/component/page/scheduledTasks/scheduled_tasks_page";
 import CreateTaskPage from "./lib/component/page/tasks/create_task_page";
 import SchedulerDashboard from "./lib/component/page/scheduler_dashboard";
-import Dashboard from "./lib/component/page/dashboard";
 
 import { Navbar, Nav } from 'react-bootstrap';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
@@ -41,7 +40,7 @@ function App() {
             <CreateTaskPage/>
           </Route>
           <Route path="/">
-            <Dashboard />
+            <SchedulerDashboard />
           </Route>
           <Route path="/schedulerDashboard">
             <SchedulerDashboard />
