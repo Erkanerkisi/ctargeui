@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const GET_TASKS_URL = "http://localhost:8080/tasks/";
-const GET_SCHEDULED_TASKS_URL = "http://localhost:8080/tasks/scheduled-tasks";
-const PUT_UPDATE_TASK = "http://localhost:8080/tasks/task/{taskId}";
-const POST_UPDATE_TASK = "http://localhost:8080/tasks/task/";
-const DELETE_UPDATE_TASK = "http://localhost:8080/tasks/task/{taskId}";
+const GET_TASKS_URL = "https://scheduler-dashboard-backend.herokuapp.com/tasks/";
+const GET_SCHEDULED_TASKS_URL = "https://scheduler-dashboard-backend.herokuapp.com/tasks/scheduled-tasks";
+const PUT_UPDATE_TASK = "https://scheduler-dashboard-backend.herokuapp.com/tasks/task/{taskId}";
+const POST_UPDATE_TASK = "https://scheduler-dashboard-backend.herokuapp.com/tasks/task/";
+const DELETE_UPDATE_TASK = "https://scheduler-dashboard-backend.herokuapp.com/tasks/task/{taskId}";
 
 
 export var getTasks = async () => {
