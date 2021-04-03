@@ -56,7 +56,7 @@ export default class TasksPage extends Component {
         <Row>
           <Col xs={3} className="justify-content-md-center">
             <h3 className="text-center">Tasks</h3>
-            <ListGroup>
+            <ListGroup style = {{maxHeight : window.innerHeight - 150 + 'px',overflow:'scroll'}}>
               {this.state.tasks.map((index) => {
                 return (
                   <ListGroup.Item
