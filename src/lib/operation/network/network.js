@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const GET_OPERATIONS_URL = "http://localhost:8080/operations/";
-const PUT_UPDATE_OPERATION = "http://localhost:8080/operations/operation/{operationId}";
-const POST_UPDATE_OPERATION = "http://localhost:8080/operations/operation/";
-const DELETE_UPDATE_OPERATION = "http://localhost:8080/operations/operation/{operationId}";
+const GET_OPERATIONS_URL = "https://scheduler-dashboard-backend.herokuapp.com/operations/";
+const PUT_UPDATE_OPERATION = "https://scheduler-dashboard-backend.herokuapp.com/operations/operation/{operationId}";
+const POST_UPDATE_OPERATION = "https://scheduler-dashboard-backend.herokuapp.com/operations/operation/";
+const DELETE_UPDATE_OPERATION = "https://scheduler-dashboard-backend.herokuapp.com/operations/operation/{operationId}";
 
 
 export var getOperations = async () => {
