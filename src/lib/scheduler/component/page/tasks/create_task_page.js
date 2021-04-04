@@ -302,7 +302,6 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.status}
                   as="select"
                   className="mr-sm-2"
-                  id="inlineFormCustomSelect"
                   custom
                   onChange={(e) =>
                     this.setState({
