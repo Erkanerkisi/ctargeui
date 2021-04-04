@@ -178,7 +178,6 @@ export default class CreateTaskPage extends Component {
   };
 
   handleCronInputChange = (index, value) => {
-    console.log("value: " + value);
     const values = [...this.state.cronInputValues];
     values[index].cronValue = value;
     this.setState({
