@@ -178,6 +178,7 @@ export default class CreateTaskPage extends Component {
   };
 
   handleCronInputChange = (index, value) => {
+    console.log("value: " + value);
     const values = [...this.state.cronInputValues];
     values[index].cronValue = value;
     this.setState({
@@ -333,8 +334,8 @@ export default class CreateTaskPage extends Component {
                   <div>
                     <Cron
                       name="cron"
-                      onChange={(event) =>
-                        this.handleCronInputChange(index, input.cronValue)
+                      onChange={(value) =>
+                        this.handleCronInputChange(index, value)
                       }
                       value={input.cronValue}
                       showResultText={true}
