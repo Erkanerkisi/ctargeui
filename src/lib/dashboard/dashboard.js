@@ -12,7 +12,7 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <div>
+      <div style = {{backgroundColor: '#dddddd',height: '100vh', minHeight : '100vh'}}>
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="/">
             <img
