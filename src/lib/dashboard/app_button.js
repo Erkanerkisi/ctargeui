@@ -12,7 +12,7 @@ export default class AppButton extends Component {
     return (
       <Button
         onClick={() => console.log("adasd")}
-        variant="primary"
+        variant="info" 
         style={{
           width: 300,
           height: 170,
