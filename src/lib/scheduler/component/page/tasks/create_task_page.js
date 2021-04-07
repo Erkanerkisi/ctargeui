@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Form, Row, Col, Container, Button, Alert } from "react-bootstrap";
 import { PlusSquareFill, DashSquareFill } from "react-bootstrap-icons";
 import { addTask } from "../../../network/network";
+import Cron from 'react-cron-generator';
+import 'react-cron-generator/dist/cron-builder.css';
 
 const errorMessage = "Creation of task has failed!";
 const successMessage = "Task has been successfully created!";
@@ -131,7 +133,7 @@ export default class CreateTaskPage extends Component {
           },
         },
         () => {
-          addTask(this.state.taskDetail).then((response)=> {
+          addTask(this.state.taskDetail).then((response) => {
             if (response.httpStatusCode == 200) {
               this.showSuccessAlert(true);
             } else {
@@ -175,9 +177,9 @@ export default class CreateTaskPage extends Component {
     });
   };
 
-  handleCronInputChange = (index, event) => {
+  handleCronInputChange = (index, value) => {
     const values = [...this.state.cronInputValues];
-    values[index].cronValue = event.target.value;
+    values[index].cronValue = value;
     this.setState({
       cronInputValues: values,
     });
@@ -201,7 +203,7 @@ export default class CreateTaskPage extends Component {
 
   render() {
     return (
-      <Container fluid>
+      <Container fluid={true}>
         <br />
         {this.state.showSuccessAlert && (
           <Alert
@@ -223,10 +225,10 @@ export default class CreateTaskPage extends Component {
             {errorMessage}
           </Alert>
         )}
-        <Row>
-          <Col xs={4}></Col>
-          <Col xs={4}>
-            <Form>
+
+        <Form>
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="taskName">
                 <Form.Label>Task Name*</Form.Label>
                 <Form.Control
@@ -245,7 +247,10 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.taskName}
                 />
               </Form.Group>
-
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="beanName">
                 <Form.Label>Bean Name*</Form.Label>
                 <Form.Control
@@ -263,7 +268,10 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.beanName}
                 />
               </Form.Group>
-
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="pathValue">
                 <Form.Label>Path Value*</Form.Label>
                 <Form.Control
@@ -281,7 +289,10 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.pathValue}
                 />
               </Form.Group>
-
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="status">
                 <Form.Label>Task Status*</Form.Label>
                 <Form.Control
@@ -291,7 +302,6 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.status}
                   as="select"
                   className="mr-sm-2"
-                  id="inlineFormCustomSelect"
                   custom
                   onChange={(e) =>
                     this.setState({
@@ -306,42 +316,54 @@ export default class CreateTaskPage extends Component {
                   <option value="Active">Active</option>
                 </Form.Control>
               </Form.Group>
-
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="cronslabel">
                 <Form.Label>Cron Expressions*</Form.Label>
               </Form.Group>
-
-              {this.state.cronInputValues.map((input, index) => (
-                <Form.Group controlId={"cron" + index}>
-                  <Form.Row key={"cron" + index}>
-                    <Col xs="auto">
-                      <Form.Control
-                        isInvalid={this.hasError("cron")}
-                        name="cron"
-                        placeholder="Cron Expression"
-                        onChange={(event) =>
-                          this.handleCronInputChange(index, event)
-                        }
-                        value={input.cronValue}
-                      />
-                    </Col>
-                    <Col xs="auto">
+            </Col>
+          </Row>
+          {this.state.cronInputValues.map((input, index) => (
+            <Form.Group controlId={"cron" + index}>
+              <Form.Row name={"cron" + index} key={"cron" + index} className="justify-content-md-center">
+                <Col xs={6} >
+                  <div>
+                    <Cron
+                      name="cron"
+                      onChange={(value) =>
+                        this.handleCronInputChange(index, value)
+                      }
+                      value={input.cronValue}
+                      showResultText={true}
+                      showResultCron={true}
+                    />
+                  </div>
+                </Col>
+                <Col xs={1}>
+                  <Row>
+                    <Col xs={1}>
                       <PlusSquareFill
                         size="20"
                         color="green"
                         onClick={() => this.cronInputValuesAddRecord()}
                       />
-                      {"       "}
+                    </Col>
+                    <Col xs={1}>
                       <DashSquareFill
                         size="20"
                         color="red"
                         onClick={() => this.cronInputValuesDeleteRecord(index)}
                       />
                     </Col>
-                  </Form.Row>
-                </Form.Group>
-              ))}
-
+                  </Row>
+                </Col>
+              </Form.Row>
+            </Form.Group>
+          ))}
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="maxLockDuration">
                 <Form.Label>Max Lock Duration*</Form.Label>
                 <Form.Control
@@ -359,12 +381,19 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.maxLockDuration}
                 />
               </Form.Group>
-
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="headerslabel">
                 <Form.Label>Headers</Form.Label>
               </Form.Group>
+            </Col>
 
-              {this.state.headerInputValues.map((input, index) => (
+          </Row>
+          {this.state.headerInputValues.map((input, index) => (
+            <Row className="justify-content-md-center">
+              <Col xs={7}>
                 <Form.Group controlId={"header" + index}>
                   <Form.Row key={"header" + index}>
                     <Col xs="auto">
@@ -406,8 +435,12 @@ export default class CreateTaskPage extends Component {
                     </Col>
                   </Form.Row>
                 </Form.Group>
-              ))}
+              </Col>
 
+            </Row>
+          ))}
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="requestBody">
                 <Form.Label>Request Body</Form.Label>
                 <Form.Control
@@ -427,7 +460,10 @@ export default class CreateTaskPage extends Component {
                   }
                 />
               </Form.Group>
-
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col xs={7}>
               <Form.Group controlId="finishTaskId">
                 <Form.Label>Finish Task Id</Form.Label>
                 <Form.Control
@@ -445,19 +481,21 @@ export default class CreateTaskPage extends Component {
                   value={this.state.taskDetail.finishTaskId}
                 />
               </Form.Group>
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col xs={2}>
               <Form.Group controlId="xx">
-                <Button variant="primary" onClick={this.onSubmit} style={{width: '100%'}}>
-                Save
+                <Button variant="primary" onClick={this.onSubmit} style={{ width: '100%' }}>
+                  Save
               </Button>
-              
               </Form.Group>
+            </Col>
 
-            </Form>
-          </Col>
-          <Col xs={4}></Col>
-        </Row>
-        <br/>
-      </Container>
+          </Row>
+        </Form>
+        <br />
+      </Container >
     );
   }
 }
