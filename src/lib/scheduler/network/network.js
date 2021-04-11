@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const GET_TASKS_URL = "https://scheduler-dashboard-backend.herokuapp.com/tasks/";
-const GET_SCHEDULED_TASKS_URL = "https://scheduler-dashboard-backend.herokuapp.com/tasks/scheduled-tasks";
-const PUT_UPDATE_TASK = "https://scheduler-dashboard-backend.herokuapp.com/tasks/task/{taskId}";
-const POST_UPDATE_TASK = "https://scheduler-dashboard-backend.herokuapp.com/tasks/task/";
-const DELETE_UPDATE_TASK = "https://scheduler-dashboard-backend.herokuapp.com/tasks/task/{taskId}";
+const GET_TASKS_URL = process.env.REACT_APP_GET_TASKS_URL;
+const GET_SCHEDULED_TASKS_URL = process.env.REACT_APP_GET_SCHEDULED_TASKS_URL;
+const PUT_UPDATE_TASK = process.env.REACT_APP_PUT_UPDATE_TASK;
+const POST_UPDATE_TASK = process.env.REACT_APP_POST_UPDATE_TASK;
+const DELETE_UPDATE_TASK = process.env.REACT_APP_DELETE_UPDATE_TASK;
 
 
 export var getTasks = async () => {

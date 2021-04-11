@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Form, Row, Col, Container, Button, Alert } from "react-bootstrap";
-import { addOperation } from "../../../network/network";
 import { PlusSquareFill, DashSquareFill } from "react-bootstrap-icons";
 import Files from "react-files";
-const errorMessage = "Creation of task has failed!";
-const successMessage = "Task has been successfully created!";
+import { postBatchOperation } from '../../../network/network';
+const errorMessage = "Operations have failed!";
+const successMessage = "Operations have been successfully processed!";
 
 export default class CreateOperationFile extends Component {
   constructor(props) {
@@ -26,17 +26,17 @@ export default class CreateOperationFile extends Component {
       operationDetail: {
         id: null,
         code: null,
-        testuri: null,
-        prepuri: null,
-        produri: null,
+        uri: null,
         method: null,
         className: null,
         callSystem: null,
-        user: null,
+        createdUser: null,
+        updatedUser: null
       },
       jsonFile:null
     };
     this.onExportSubmit = this.onExportSubmit.bind(this);
+    this.onSave = this.onSave.bind(this);
     this.onImportSubmit = this.onImportSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.opInputValuesAddRecord = this.opInputValuesAddRecord.bind(this);
@@ -52,6 +52,9 @@ export default class CreateOperationFile extends Component {
   }
 
   handleInputChange = (index, event) => {
+    
+    console.log("ENV is " + process.env.NODE_ENV);
+    console.log("process" + process.env.REACT_APP_GET_TASKS_URL);
     const values = [...this.state.operations];
     if (event.target.name === "id") {
       values[index].id = event.target.value;
@@ -98,6 +101,7 @@ export default class CreateOperationFile extends Component {
       operations: values,
     });
   };
+  
   onExportSubmit = () => {
     var data = JSON.stringify(this.state.operations);
     const element = document.createElement("a");
@@ -109,6 +113,32 @@ export default class CreateOperationFile extends Component {
   };
   onImportSubmit = () => {
     this.upload.click();
+  };
+
+  onSave = () => {
+    //validations
+    var realOps = this.state.operations.map((operation) => {
+      
+      var _uri;
+      
+      if(process.env.NODE_ENV =="development"){
+        _uri = operation.testuri;
+      } else if(process.env.NODE_ENV =="production") {
+        _uri = operation.produri;
+      }
+
+      return {
+        id: operation.id,
+        code: operation.code,
+        uri: _uri,
+        method: operation.method,
+        className: operation.className,
+        callSystem: operation.className,
+        createdUser: operation.user,
+        updatedUser: operation.user
+      }
+    });
+    postBatchOperation(realOps);
   };
 
   onChangeFile(event) {
@@ -227,7 +257,7 @@ export default class CreateOperationFile extends Component {
         ))}
         <Row className="justify-content-md-center">
           <Col xs={2}>
-            <Form.Group controlId="xx">
+            <Form.Group controlId="export">
               <Button
                 variant="primary"
                 onClick={this.onExportSubmit}
@@ -238,13 +268,24 @@ export default class CreateOperationFile extends Component {
             </Form.Group>
           </Col>
           <Col xs={2}>
-            <Form.Group controlId="xx">
+            <Form.Group controlId="import">
               <Button
                 variant="primary"
                 onClick={this.onImportSubmit}
                 style={{ width: "100%" }}
               >
                 Import
+              </Button>
+            </Form.Group>
+          </Col>
+          <Col xs={2}>
+            <Form.Group controlId="save">
+              <Button
+                variant="primary"
+                onClick={this.onSave}
+                style={{ width: "100%" }}
+              >
+                Save
               </Button>
             </Form.Group>
           </Col>

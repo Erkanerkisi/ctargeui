@@ -1,10 +1,16 @@
 import axios from "axios";
 
-const GET_OPERATIONS_URL = "https://scheduler-dashboard-backend.herokuapp.com/operations/";
-const PUT_UPDATE_OPERATION = "https://scheduler-dashboard-backend.herokuapp.com/operations/operation/{operationId}";
-const POST_UPDATE_OPERATION = "https://scheduler-dashboard-backend.herokuapp.com/operations/operation/";
-const DELETE_UPDATE_OPERATION = "https://scheduler-dashboard-backend.herokuapp.com/operations/operation/{operationId}";
+const GET_OPERATIONS_URL = process.env.REACT_APP_GET_OPERATIONS_URL;
+const PUT_UPDATE_OPERATION = process.env.REACT_APP_PUT_UPDATE_OPERATION;
+const POST_UPDATE_OPERATION = process.env.REACT_APP_POST_UPDATE_OPERATION;
+const DELETE_UPDATE_OPERATION = process.env.REACT_APP_DELETE_UPDATE_OPERATION;
+const POST_BATCH_OPERATION = process.env.REACT_APP_POST_BATCH_OPERATION;
 
+export var postBatchOperation = async (op) => {
+  var response;
+  response = await postService(POST_BATCH_OPERATION, op);
+  return response;
+};
 
 export var getOperations = async () => {
   var response;
