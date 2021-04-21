@@ -1,4 +1,3 @@
-import { Navbar, Nav } from "react-bootstrap";
 import { Route, Link, Switch, BrowserRouter } from "react-router-dom";
 import Dashboard from "./lib/dashboard/dashboard";
 import Scheduler from "./lib/scheduler/scheduler_router";

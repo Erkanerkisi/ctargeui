@@ -17,7 +17,7 @@ export default class OperationPage extends Component {
     };
     this.onOperationSelect = this.onOperationSelect.bind(this);
   }
-
+  
   componentDidMount() {
     getOperations().then((res)=> {
       

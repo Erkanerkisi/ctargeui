@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import 'react-cron-generator/dist/cron-builder.css';
+import Cron from 'react-cron-generator';
 import { Form, Row, Col, Container, Button, Alert } from "react-bootstrap";
 import { PlusSquareFill, DashSquareFill } from "react-bootstrap-icons";
 import { addTask } from "../../../network/network";
-import Cron from 'react-cron-generator';
-import 'react-cron-generator/dist/cron-builder.css';
+
 
 const errorMessage = "Creation of task has failed!";
 const successMessage = "Task has been successfully created!";
