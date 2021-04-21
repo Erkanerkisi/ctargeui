@@ -62,6 +62,10 @@ export default class CreateOperationFile extends Component {
       values[index].code = event.target.value;
     } else if (event.target.name === "testuri") {
       values[index].testuri = event.target.value;
+    } else if (event.target.name === "prepuri") {
+      values[index].testuri = event.target.value;
+    } else if (event.target.name === "produri") {
+      values[index].testuri = event.target.value;
     } else if (event.target.name === "method") {
       values[index].method = event.target.value;
     } else if (event.target.name === "className") {
