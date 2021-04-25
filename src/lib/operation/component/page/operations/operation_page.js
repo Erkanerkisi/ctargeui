@@ -1,9 +1,18 @@
 import React, { Component } from "react";
-import { Container, Row, Col, ListGroup,Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Alert,
+  Form,
+  InputGroup,
+} from "react-bootstrap";
 import Welcome from "../../welcome";
 import SchSpinner from "../../spinner";
 import { getOperations } from "../../../network/network";
 import OperationDetail from "./operation_detail";
+import { Search } from "react-bootstrap-icons";
 
 export default class OperationPage extends Component {
   constructor(props) {
@@ -14,22 +23,26 @@ export default class OperationPage extends Component {
       activeOperationId: 0,
       isLoading: true,
       serviceError: false,
+      filteredOperations: [],
     };
     this.onOperationSelect = this.onOperationSelect.bind(this);
   }
-  
+
   componentDidMount() {
-    getOperations().then((res)=> {
-      
+    getOperations().then((res) => {
       if (res.httpStatusCode == 200) {
-        this.setState({ operations: res.body, isLoading: false });
+        this.setState({
+          filteredOperations: res.body,
+          operations: res.body,
+          isLoading: false,
+        });
       } else {
         this.setState({ serviceError: true, isLoading: false });
       }
-    }); 
+    });
   }
 
-  onOperationSelect = (op) => {    
+  onOperationSelect = (op) => {
     this.setState({
       selectedOperation: op,
     });
@@ -40,23 +53,54 @@ export default class OperationPage extends Component {
       operationDetail = <Welcome />;
     } else {
       operationDetail = (
-        <OperationDetail operationDetail={this.state.selectedOperation}></OperationDetail>
+        <OperationDetail
+          operationDetail={this.state.selectedOperation}
+        ></OperationDetail>
       );
     }
 
     return operationDetail;
   }
 
-  
+  onSearchTextChanged = (e) => {
+    var filterText =
+      e.target.value != null ? e.target.value.toLowerCase() : e.target.value;
+    var filteredOperations = this.state.operations.filter((fil) =>
+      fil.code.toLowerCase().includes(filterText)
+    );
+    this.setState({
+      filteredOperations: filteredOperations,
+    });
+  };
+
   renderBody() {
     return (
       <Container fluid>
         <br />
         <Row>
           <Col xs={3} className="justify-content-md-center">
+            <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <Search />
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
+                label="search"
+                placeholder="Search"
+                name="search"
+                onChange={this.onSearchTextChanged}
+              />
+            </InputGroup>
+
             <h3 className="text-center">Operations</h3>
-            <ListGroup style = {{maxHeight : window.innerHeight - 150 + 'px',overflow:'scroll'}}>
-              {this.state.operations.map((index) => {
+            <ListGroup
+              style={{
+                maxHeight: window.innerHeight - 150 + "px",
+                overflow: "scroll",
+              }}
+            >
+              {this.state.filteredOperations.map((index) => {
                 return (
                   <ListGroup.Item
                     active={
@@ -75,7 +119,7 @@ export default class OperationPage extends Component {
 
           <Col xs={9}>{this.renderOperationDetail()}</Col>
         </Row>
-        <br/>
+        <br />
       </Container>
     );
   }

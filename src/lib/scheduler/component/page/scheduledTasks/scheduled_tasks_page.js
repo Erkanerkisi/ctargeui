@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Container, Row, Col, ListGroup, Alert } from "react-bootstrap";
+import { Container, Row, Col, ListGroup, Alert, Form,InputGroup } from "react-bootstrap";
 import ScheduledTaskDetail from "./scheduled_task_detail";
 import Welcome from "../../welcome";
 import { getScheduledTasks } from "../../../network/network";
 import SchSpinner from "../../spinner";
+import { Search } from "react-bootstrap-icons";
 
 export default class ScheduledTasksPage extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ export default class ScheduledTasksPage extends Component {
       activeTaskId: 0,
       isLoading: true,
       serviceError: false,
+      filteredTasks: [],
     };
     this.onTaskSelect = this.onTaskSelect.bind(this);
   }
@@ -21,7 +23,7 @@ export default class ScheduledTasksPage extends Component {
   componentDidMount() {
     getScheduledTasks().then((res) => {
       if (res.httpStatusCode == 200) {
-        this.setState({ tasks: res.body, isLoading: false });
+        this.setState({ tasks: res.body,filteredTasks: res.body, isLoading: false });
       } else {
         this.setState({ serviceError: true, isLoading: false });
       }
@@ -49,15 +51,36 @@ export default class ScheduledTasksPage extends Component {
     return taskDetail;
   }
 
+  onSearchTextChanged = (e) => {
+    var filterText = e.target.value != null ? e.target.value.toLowerCase() : e.target.value;
+    var filteredTasks = this.state.tasks.filter((fil) =>fil.taskName.toLowerCase().includes(filterText));
+    this.setState({
+      filteredTasks: filteredTasks,
+    });
+  };
+
   renderBody() {
     return (
       <Container fluid>
         <br />
         <Row>
           <Col xs={3} className="justify-content-md-center">
+          <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <Search />
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
+                label="search"
+                placeholder="Search"
+                name="search"
+                onChange={this.onSearchTextChanged}
+              />
+            </InputGroup>
             <h3 className="text-center">Scheduled Tasks</h3>
             <ListGroup>
-              {this.state.tasks.map((index) => {
+              {this.state.filteredTasks.map((index) => {
                 return (
                   <ListGroup.Item
                     active={

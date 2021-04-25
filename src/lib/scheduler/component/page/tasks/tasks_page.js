@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Container, Row, Col, ListGroup,Alert } from "react-bootstrap";
+import { Container, Row, Col, ListGroup,Alert, Form ,InputGroup} from "react-bootstrap";
 import TaskDetail from "./task_detail";
 import Welcome from "../../welcome";
 import { getTasks } from "../../../network/network";
 import SchSpinner from "../../spinner";
-
+import { Search } from "react-bootstrap-icons";
 
 export default class TasksPage extends Component {
   constructor(props) {
@@ -15,6 +15,7 @@ export default class TasksPage extends Component {
       activeTaskId: 0,
       isLoading: true,
       serviceError: false,
+      filteredTasks: [],
     };
     this.onTaskSelect = this.onTaskSelect.bind(this);
   }
@@ -23,7 +24,7 @@ export default class TasksPage extends Component {
     getTasks().then((res)=> {
       
       if (res.httpStatusCode == 200) {
-        this.setState({ tasks: res.body, isLoading: false });
+        this.setState({ tasks: res.body,filteredTasks: res.body, isLoading: false });
       } else {
         this.setState({ serviceError: true, isLoading: false });
       }
@@ -48,6 +49,13 @@ export default class TasksPage extends Component {
     return taskDetail;
   }
 
+  onSearchTextChanged = (e) => {
+    var filterText = e.target.value != null ? e.target.value.toLowerCase() : e.target.value;
+    var filteredTasks = this.state.tasks.filter((fil) =>fil.taskName.toLowerCase().includes(filterText));
+    this.setState({
+      filteredTasks: filteredTasks,
+    });
+  };
   
   renderBody() {
     return (
@@ -55,9 +63,22 @@ export default class TasksPage extends Component {
         <br />
         <Row>
           <Col xs={3} className="justify-content-md-center">
+          <InputGroup>
+              <InputGroup.Prepend>
+                <InputGroup.Text>
+                  <Search />
+                </InputGroup.Text>
+              </InputGroup.Prepend>
+              <Form.Control
+                label="search"
+                placeholder="Search"
+                name="search"
+                onChange={this.onSearchTextChanged}
+              />
+            </InputGroup>
             <h3 className="text-center">Tasks</h3>
             <ListGroup style = {{maxHeight : window.innerHeight - 150 + 'px',overflow:'scroll'}}>
-              {this.state.tasks.map((index) => {
+              {this.state.filteredTasks.map((index) => {
                 return (
                   <ListGroup.Item
                     active={
